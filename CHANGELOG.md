@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0](https://github.com/Celli119/japa-intelliJ/compare/v1.0.0...v1.1.0) (2025-10-26)
+
+### ✨ Features
+
+* **ci:** add concurrency control to auto-cancel previous CI runs ([b4be84c](https://github.com/Celli119/japa-intelliJ/commit/b4be84cd0a7de123bc4248c99a68ca2e97612afd))
+
+### 🐛 Bug Fixes
+
+* **ci:** correct Renovate configuration ([19f1f46](https://github.com/Celli119/japa-intelliJ/commit/19f1f4695f1abfc2a6188579ff6c2d685da5aa1c))
+* **ci:** only upload artifacts when build exists ([b7aa00f](https://github.com/Celli119/japa-intelliJ/commit/b7aa00fa767c6699bb77b52767263a331999855f))
+
 ## 1.0.0 (2025-10-26)
 
 ### ⚠ BREAKING CHANGES
