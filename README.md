@@ -213,6 +213,16 @@ All pull requests are automatically validated by CI/CD, which checks:
 - Build success
 - Gradle wrapper integrity
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+## Releases
+
+This project uses automated semantic versioning and releases. See [.github/RELEASE.md](.github/RELEASE.md) for details on:
+- How releases are triggered
+- Commit message conventions
+- Publishing to JetBrains Marketplace
+- Required GitHub secrets
+
 ## License
 
 [Specify your license here]

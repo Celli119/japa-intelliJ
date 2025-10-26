@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.japaTestRunner"
-version = "1.0-SNAPSHOT"
+version = System.getenv("VERSION") ?: "0.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()

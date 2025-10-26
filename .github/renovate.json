@@ -1,0 +1,100 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":timezone(UTC)"
+  ],
+  "labels": ["dependencies"],
+  "schedule": ["before 3am on Monday"],
+  "prHourlyLimit": 3,
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "description": "IntelliJ Platform and plugins - Group updates together",
+      "matchDatasources": ["gradle"],
+      "matchPackagePatterns": [
+        "org\\.jetbrains\\.intellij",
+        "org\\.jetbrains\\.kotlin",
+        "com\\.jetbrains"
+      ],
+      "groupName": "IntelliJ Platform",
+      "commitMessageTopic": "IntelliJ Platform dependencies",
+      "schedule": ["before 3am on the first day of the month"],
+      "automerge": false,
+      "reviewers": ["team:maintainers"]
+    },
+    {
+      "description": "IDE version updates - Require manual review",
+      "matchDatasources": ["gradle"],
+      "matchPackageNames": [
+        "com.jetbrains.intellij.idea"
+      ],
+      "matchUpdateTypes": ["major", "minor"],
+      "groupName": "IDE Version",
+      "commitMessageTopic": "IDE version",
+      "automerge": false,
+      "labels": ["dependencies", "ide-version"],
+      "reviewers": ["team:maintainers"],
+      "prPriority": 10
+    },
+    {
+      "description": "Gradle wrapper updates",
+      "matchDatasources": ["gradle-wrapper"],
+      "commitMessageTopic": "Gradle wrapper",
+      "automerge": false,
+      "schedule": ["before 3am on the 15th day of the month"]
+    },
+    {
+      "description": "Kotlin and build tool plugins",
+      "matchDatasources": ["gradle"],
+      "matchPackagePatterns": [
+        "org\\.jetbrains\\.kotlin",
+        "com\\.diffplug\\.spotless",
+        "org\\.jetbrains\\.gradle\\.plugin\\.idea-ext"
+      ],
+      "excludePackageNames": [
+        "org.jetbrains.intellij"
+      ],
+      "groupName": "Build plugins",
+      "commitMessageTopic": "build plugins",
+      "automerge": false
+    },
+    {
+      "description": "GitHub Actions - Minor and patch updates can be auto-merged",
+      "matchDatasources": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "commitMessageTopic": "GitHub Actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "GitHub Actions - Major updates require review",
+      "matchDatasources": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["dependencies", "github-actions", "major-update"]
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "prPriority": 20,
+    "automerge": false
+  },
+  "platformAutomerge": true,
+  "gradle": {
+    "enabled": true,
+    "timeout": 600
+  },
+  "semanticCommits": "enabled",
+  "commitMessagePrefix": "chore(deps):",
+  "commitMessageAction": "update",
+  "commitMessageExtra": "to {{newValue}}",
+  "rangeStrategy": "bump",
+  "ignorePresets": [":prHourlyLimit2"],
+  "ignoreDeps": [],
+  "postUpdateOptions": ["gomodTidy"]
+}
