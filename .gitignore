@@ -1,0 +1,33 @@
+### IntelliJ IDEA ###
+*.iml
+*.ipr
+*.iws
+
+# Keep specific .idea files if needed (like MinecraftDev does)
+.idea/*
+# Uncomment if you want to keep some .idea files:
+# !.idea/icon.png
+# !.idea/encodings.xml
+# !.idea/inspectionProfiles/Project_Default.xml
+
+**/out/
+**/build/
+
+### Gradle ###
+**/.gradle/
+.kotlin/
+
+### IntelliJ Platform Plugin Development ###
+.intellijPlatform/
+.sandbox/
+
+### Mac OS ###
+.DS_Store
+
+### Local config ###
+.claude/
+.serena/
+CLAUDE.md
+
+# Keep Gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar

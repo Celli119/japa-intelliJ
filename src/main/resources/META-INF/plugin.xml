@@ -1,0 +1,40 @@
+<idea-plugin>
+    <id>com.japaTestRunner</id>
+    <name>Japa Test Runner</name>
+    <vendor>Japa Community</vendor>
+
+    <description><![CDATA[
+    Interactive test runner for Japa testing framework.<br>
+    <br>
+    Features:
+    <ul>
+      <li>Run individual tests and test groups from gutter icons</li>
+      <li>Debug Japa tests with breakpoint support</li>
+      <li>View test results in integrated test runner UI</li>
+      <li>Auto-detection of Japa tests in TypeScript/JavaScript files</li>
+    </ul>
+  ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>JavaScript</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Run Configuration -->
+        <configurationType implementation="com.japaTestRunner.run.JapaRunConfigurationType"/>
+        <runConfigurationProducer implementation="com.japaTestRunner.run.JapaRunConfigurationProducer"/>
+
+        <!-- Line Markers for Gutter Icons -->
+        <runLineMarkerContributor language="TypeScript"
+                                  implementationClass="com.japaTestRunner.editor.JapaTestLineMarkerProvider"/>
+        <runLineMarkerContributor language="JavaScript"
+                                  implementationClass="com.japaTestRunner.editor.JapaTestLineMarkerProvider"/>
+
+        <!-- Program Runner -->
+        <programRunner implementation="com.japaTestRunner.run.JapaTestRunner"/>
+    </extensions>
+
+    <actions>
+        <!-- Optional: Add toolbar actions if needed -->
+    </actions>
+</idea-plugin>

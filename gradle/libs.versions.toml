@@ -1,0 +1,14 @@
+[versions]
+kotlin = "1.9.25"
+intellij-plugin = "1.17.4"
+spotless = "6.25.0"
+idea-ext = "1.1.10"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+intellij = { id = "org.jetbrains.intellij", version.ref = "intellij-plugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "idea-ext" }
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
