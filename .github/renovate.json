@@ -22,8 +22,7 @@
       "groupName": "IntelliJ Platform",
       "commitMessageTopic": "IntelliJ Platform dependencies",
       "schedule": ["before 3am on the first day of the month"],
-      "automerge": false,
-      "reviewers": ["team:maintainers"]
+      "automerge": false
     },
     {
       "description": "IDE version updates - Require manual review",
@@ -36,7 +35,6 @@
       "commitMessageTopic": "IDE version",
       "automerge": false,
       "labels": ["dependencies", "ide-version"],
-      "reviewers": ["team:maintainers"],
       "prPriority": 10
     },
     {
@@ -76,6 +74,15 @@
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["dependencies", "github-actions", "major-update"]
+    },
+    {
+      "description": "NPM packages in GitHub workflows - Group updates together",
+      "matchManagers": ["npm"],
+      "matchFileNames": [".github/workflows/**"],
+      "groupName": "Workflow npm dependencies",
+      "commitMessageTopic": "workflow npm dependencies",
+      "automerge": false,
+      "labels": ["dependencies", "npm"]
     }
   ],
   "vulnerabilityAlerts": {
@@ -95,6 +102,5 @@
   "commitMessageExtra": "to {{newValue}}",
   "rangeStrategy": "bump",
   "ignorePresets": [":prHourlyLimit2"],
-  "ignoreDeps": [],
-  "postUpdateOptions": ["gomodTidy"]
+  "ignoreDeps": []
 }
