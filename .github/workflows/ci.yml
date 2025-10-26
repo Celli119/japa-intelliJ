@@ -7,6 +7,10 @@ on:
     branches: ['*']
   workflow_call:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_call' }}
+
 jobs:
   build:
     name: Build and Test
