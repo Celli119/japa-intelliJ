@@ -61,8 +61,17 @@ jobs:
           PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
         run: npx semantic-release
 
+      - name: Check if build artifacts exist
+        id: check-artifacts
+        run: |
+          if ls build/distributions/*.zip 1> /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload plugin artifact
-        if: success()
+        if: success() && steps.check-artifacts.outputs.exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: plugin-distribution
