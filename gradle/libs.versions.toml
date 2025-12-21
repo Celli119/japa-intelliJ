@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.2.21"
 intellij-plugin = "1.17.4"
-spotless = "8.0.0"
+spotless = "8.1.0"
 idea-ext = "1.3"
 
 [plugins]
