@@ -25,21 +25,6 @@
       "automerge": false
     },
     {
-      "description": "IDE version updates - Auto-merge and trigger release for platform compatibility",
-      "matchDatasources": ["gradle"],
-      "matchPackageNames": [
-        "com.jetbrains.intellij.idea"
-      ],
-      "matchUpdateTypes": ["major", "minor"],
-      "groupName": "IDE Version",
-      "commitMessageTopic": "IDE version",
-      "semanticCommitType": "build",
-      "automerge": true,
-      "automergeType": "pr",
-      "labels": ["dependencies", "ide-version"],
-      "prPriority": 10
-    },
-    {
       "description": "Gradle wrapper updates",
       "matchDatasources": ["gradle-wrapper"],
       "commitMessageTopic": "Gradle wrapper",

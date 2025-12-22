@@ -1,0 +1,118 @@
+name: Update IDE Compatibility
+
+on:
+  schedule:
+    # Run weekly on Mondays at 6am UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force update even if version unchanged'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-ide-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest IntelliJ IDEA version
+        id: get-version
+        run: |
+          # Fetch latest stable IntelliJ IDEA version from JetBrains API
+          RESPONSE=$(curl -s "https://data.services.jetbrains.com/products/releases?code=IIU&latest=true&type=release")
+
+          # Extract version (e.g., "2025.2.1")
+          FULL_VERSION=$(echo "$RESPONSE" | jq -r '.IIU[0].version')
+
+          # Extract major.minor (e.g., "2025.2")
+          MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d'.' -f1,2)
+
+          # Convert to build number format (2025.2 -> 252, 2024.3 -> 243)
+          YEAR=$(echo "$MAJOR_MINOR" | cut -d'.' -f1)
+          MINOR=$(echo "$MAJOR_MINOR" | cut -d'.' -f2)
+
+          # Build number format: YYM where YY is last 2 digits of year, M is minor version
+          YEAR_SHORT=${YEAR: -2}
+          BUILD_NUMBER="${YEAR_SHORT}${MINOR}"
+
+          echo "full_version=$FULL_VERSION" >> $GITHUB_OUTPUT
+          echo "major_minor=$MAJOR_MINOR" >> $GITHUB_OUTPUT
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+
+          echo "Latest IntelliJ IDEA: $FULL_VERSION (build $BUILD_NUMBER)"
+
+      - name: Check current untilBuild
+        id: check-current
+        run: |
+          CURRENT=$(grep -oP 'untilBuild\.set\("\K[0-9]+' build.gradle.kts)
+          echo "current=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current untilBuild: $CURRENT"
+
+      - name: Update build.gradle.kts
+        id: update
+        run: |
+          CURRENT="${{ steps.check-current.outputs.current }}"
+          NEW="${{ steps.get-version.outputs.build_number }}"
+          FORCE="${{ inputs.force }}"
+
+          if [ "$CURRENT" = "$NEW" ] && [ "$FORCE" != "true" ]; then
+            echo "Already at latest version ($CURRENT), skipping"
+            echo "updated=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if [ "$CURRENT" -gt "$NEW" ] 2>/dev/null; then
+            echo "Current version ($CURRENT) is newer than latest ($NEW), skipping"
+            echo "updated=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Update untilBuild in build.gradle.kts
+          sed -i "s/untilBuild\.set(\"[0-9]*\.\*\")/untilBuild.set(\"$NEW.*\")/" build.gradle.kts
+
+          # Update CLAUDE.md compatibility comment
+          sed -i "s/Plugin compatibility: 241 (2024.1) to [0-9]*\.\* ([0-9]*\.[0-9]*)/Plugin compatibility: 241 (2024.1) to $NEW.* (${{ steps.get-version.outputs.major_minor }})/" CLAUDE.md
+
+          echo "Updated untilBuild from $CURRENT to $NEW"
+          echo "updated=true" >> $GITHUB_OUTPUT
+          echo "old_version=$CURRENT" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        id: create-pr
+        if: steps.update.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "build(ide): support IntelliJ ${{ steps.get-version.outputs.major_minor }}"
+          title: "build(ide): Support IntelliJ ${{ steps.get-version.outputs.major_minor }}"
+          body: |
+            ## Summary
+            Updates IDE compatibility to support IntelliJ IDEA ${{ steps.get-version.outputs.major_minor }} (build ${{ steps.get-version.outputs.build_number }}).
+
+            ### Changes
+            - Updated `untilBuild` from `${{ steps.update.outputs.old_version }}.*` to `${{ steps.get-version.outputs.build_number }}.*`
+
+            ### Compatibility
+            - **Minimum:** IntelliJ IDEA 2024.1 (build 241)
+            - **Maximum:** IntelliJ IDEA ${{ steps.get-version.outputs.major_minor }} (build ${{ steps.get-version.outputs.build_number }})
+
+            This PR was automatically created by the IDE compatibility workflow.
+          branch: update-ide-${{ steps.get-version.outputs.build_number }}
+          labels: |
+            dependencies
+            ide-version
+          delete-branch: true
+
+      - name: Enable auto-merge
+        if: steps.create-pr.outputs.pull-request-number
+        run: gh pr merge --auto --squash "${{ steps.create-pr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
