@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3](https://github.com/Celli119/japa-intelliJ/compare/v1.1.2...v1.1.3) (2025-12-22)
+
+### 🐛 Bug Fixes
+
+* **ci:** add auto-update workflow for IDE compatibility ([bba8f53](https://github.com/Celli119/japa-intelliJ/commit/bba8f532fc487554a3db33fac9c3008ce61a8f81))
+
+### 🏗️ Build System
+
+* **ide:** support IntelliJ 2025.3 ([ff74892](https://github.com/Celli119/japa-intelliJ/commit/ff74892b309f9914ff6501822ba2e380aedb3f56))
+
 ## [1.1.2](https://github.com/Celli119/japa-intelliJ/compare/v1.1.1...v1.1.2) (2025-12-22)
 
 ### 🐛 Bug Fixes
