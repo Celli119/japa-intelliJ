@@ -25,7 +25,7 @@
       "automerge": false
     },
     {
-      "description": "IDE version updates - Require manual review",
+      "description": "IDE version updates - Auto-merge and trigger release for platform compatibility",
       "matchDatasources": ["gradle"],
       "matchPackageNames": [
         "com.jetbrains.intellij.idea"
@@ -33,7 +33,9 @@
       "matchUpdateTypes": ["major", "minor"],
       "groupName": "IDE Version",
       "commitMessageTopic": "IDE version",
-      "automerge": false,
+      "semanticCommitType": "build",
+      "automerge": true,
+      "automergeType": "pr",
       "labels": ["dependencies", "ide-version"],
       "prPriority": 10
     },
