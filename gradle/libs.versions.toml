@@ -2,7 +2,7 @@
 kotlin = "2.3.0"
 intellij-plugin = "1.17.4"
 spotless = "8.1.0"
-idea-ext = "1.4"
+idea-ext = "1.4.1"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
